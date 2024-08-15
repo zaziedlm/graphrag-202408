@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "graphrag-202408"
+version = "0.1.0"
+description = ""
+authors = ["Shuichi Kataoka <shu01k9@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+langchain = "^0.2.14"
+langchain-community = "^0.2.12"
+langchain-openai = "^0.1.21"
+langchain-experimental = "^0.0.64"
+neo4j = "^5.23.1"
+wikipedia = "^1.4.0"
+tiktoken = "^0.7.0"
+yfiles-jupyter-graphs = "^1.7.3"
+python-dotenv = "^1.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
