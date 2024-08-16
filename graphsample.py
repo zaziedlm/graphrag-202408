@@ -26,7 +26,8 @@ from langchain_core.pydantic_v1 import BaseModel, Field
 from typing import List
 from langchain_core.output_parsers import StrOutputParser
 from langchain_community.graphs import Neo4jGraph
-from langchain.document_loaders import TextLoader
+#from langchain.document_loaders import TextLoader  # old import
+from langchain_community.document_loaders import TextLoader
 from langchain.text_splitter import TokenTextSplitter
 from langchain_openai import ChatOpenAI
 from langchain_experimental.graph_transformers import LLMGraphTransformer
@@ -56,7 +57,8 @@ raw_documents = TextLoader('ドラゴンボールあらすじ.txt', encoding='ut
 text_splitter = TokenTextSplitter(chunk_size=512, chunk_overlap=125)
 documents = text_splitter.split_documents(raw_documents)
 
-llm=ChatOpenAI(temperature=0, model_name="gpt-4o-mini")
+#llm=ChatOpenAI(temperature=0, model_name="gpt-4o-mini")
+llm=ChatOpenAI(temperature=0, model_name="gpt-4o")
 llm_transformer = LLMGraphTransformer(llm=llm)
 graph_documents = llm_transformer.convert_to_graph_documents(documents)
 
