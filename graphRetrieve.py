@@ -53,39 +53,47 @@ from dotenv import load_dotenv
 # read .env file
 load_dotenv()
 
-raw_documents = TextLoader('ドラゴンボールあらすじ.txt', encoding='utf-8').load()
-text_splitter = TokenTextSplitter(chunk_size=512, chunk_overlap=125)
-documents = text_splitter.split_documents(raw_documents)
+# 
+#
+#
+
+# raw_documents = TextLoader('ドラゴンボールあらすじ.txt', encoding='utf-8').load()
+# text_splitter = TokenTextSplitter(chunk_size=512, chunk_overlap=125)
+# documents = text_splitter.split_documents(raw_documents)
 
 llm=ChatOpenAI(temperature=0, model_name="gpt-4o-mini")
 #llm=ChatOpenAI(temperature=0, model_name="gpt-4o")
-llm_transformer = LLMGraphTransformer(llm=llm)
-graph_documents = llm_transformer.convert_to_graph_documents(documents)
+# llm_transformer = LLMGraphTransformer(llm=llm)
+# graph_documents = llm_transformer.convert_to_graph_documents(documents)
 
-graph = Neo4jGraph()
-
-graph.add_graph_documents(
-    graph_documents,
-    baseEntityLabel=True,
-    include_source=True
+graph = Neo4jGraph(
+    url = os.environ["NEO4J_URI"],
+    username = os.environ["NEO4J_USERNAME"],
+    password = os.environ["NEO4J_PASSWORD"]
 )
 
-# directly show the graph resulting from the given Cypher query
-default_cypher = "MATCH (s)-[r:!MENTIONS]->(t) RETURN s,r,t LIMIT 50"
+# graph.add_graph_documents(
+#     graph_documents,
+#     baseEntityLabel=True,
+#     include_source=True
+# )
 
-def showGraph(cypher: str = default_cypher):
-    # create a neo4j session to run queries
-    driver = GraphDatabase.driver(
-        uri = os.environ["NEO4J_URI"],
-        auth = (os.environ["NEO4J_USERNAME"],
-                os.environ["NEO4J_PASSWORD"]))
-    session = driver.session()
-    widget = GraphWidget(graph = session.run(cypher).graph())
-    widget.node_label_mapping = 'id'
-    #display(widget)
-    return widget
+# # directly show the graph resulting from the given Cypher query
+# default_cypher = "MATCH (s)-[r:!MENTIONS]->(t) RETURN s,r,t LIMIT 50"
 
-showGraph()
+# def showGraph(cypher: str = default_cypher):
+#     # create a neo4j session to run queries
+#     driver = GraphDatabase.driver(
+#         uri = os.environ["NEO4J_URI"],
+#         auth = (os.environ["NEO4J_USERNAME"],
+#                 os.environ["NEO4J_PASSWORD"]))
+#     session = driver.session()
+#     widget = GraphWidget(graph = session.run(cypher).graph())
+#     widget.node_label_mapping = 'id'
+#     #display(widget)
+#     return widget
+
+# showGraph()
 
 
 
@@ -97,7 +105,7 @@ vector_index = Neo4jVector.from_existing_graph(
     embedding_node_property="embedding"
 )
 
-graph.query("CREATE FULLTEXT INDEX entity IF NOT EXISTS FOR (e:__Entity__) ON EACH [e.id]")
+# graph.query("CREATE FULLTEXT INDEX entity IF NOT EXISTS FOR (e:__Entity__) ON EACH [e.id]")
 
 # Extract entities from text
 class Entities(BaseModel):
@@ -125,7 +133,7 @@ prompt = ChatPromptTemplate.from_messages(
 
 entity_chain = prompt | llm.with_structured_output(Entities)
 
-entity_chain.invoke({"question": "梧空とにゃんたは戦った"}).names
+# entity_chain.invoke({"question": "梧空とにゃんたは戦った"}).names
 
 def generate_full_text_query(input: str) -> str:
     """
@@ -172,7 +180,7 @@ def structured_retriever(question: str) -> str:
         result += "\n".join([el['output'] for el in response])
     return result
 
-print(structured_retriever("孫悟空と関わりがあるエンティティを知りたい"))
+# print(structured_retriever("孫悟空と関わりがあるエンティティを知りたい"))
 
 def retriever(question: str):
     print(f"Search query: {question}")
@@ -207,6 +215,6 @@ chain = (
     | StrOutputParser()
 )
 
-result = chain.invoke({"question": "梧空と仲が悪いのは誰？"})
+result = chain.invoke({"question": "梧空と仲が良いのは誰"})
 
 print(result)
