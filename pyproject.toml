@@ -7,16 +7,18 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-langchain = "^0.2.14"
-langchain-community = "^0.2.12"
-langchain-openai = "0.1.22"
-langchain-experimental = "^0.0.64"
-neo4j = "^5.23.1"
+langchain = "^0.3.4"
+langchain-community = "^0.3.3"
+langchain-openai = "^0.2.3"
+langchain-experimental = "^0.3.2"
+neo4j = "^5.25.0"
 wikipedia = "^1.4.0"
-tiktoken = "^0.7.0"
-yfiles-jupyter-graphs = "^1.7.3"
 python-dotenv = "^1.0.1"
-jupyter = "^1.0.0"
+langchain-ollama = "^0.2.0"
+yfiles-jupyter-graphs = "^1.8.1"
+sentence-transformers = "^3.2.1"
+transformers = "^4.46.0"
+langchain-huggingface = "^0.1.0"
 
 
 [build-system]
