@@ -22,7 +22,8 @@ from yfiles_jupyter_graphs import GraphWidget
 from langchain_core.runnables import RunnableLambda, RunnableParallel, RunnablePassthrough, ConfigurableField
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.prompts.prompt import PromptTemplate
-from langchain_core.pydantic_v1 import BaseModel, Field
+#from langchain_core.pydantic_v1 import BaseModel, Field
+from pydantic import BaseModel, Field
 from typing import List
 from langchain_core.output_parsers import StrOutputParser
 from langchain_community.graphs import Neo4jGraph
