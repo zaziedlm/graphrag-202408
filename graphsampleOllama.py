@@ -37,6 +37,7 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores.neo4j_vector import remove_lucene_chars
 from dotenv import load_dotenv
 from langchain_experimental.llms.ollama_functions import OllamaFunctions
+from langchain_ollama import ChatOllama, OllamaEmbeddings
 
 # try:
 #     import google.colab
@@ -92,10 +93,12 @@ def showGraph(cypher: str = default_cypher):
 
 showGraph()
 
-
+# for Ollama local-embedded-LLM
+embedding_model = OllamaEmbeddings(model=os.environ["OLLAMA_EMBED_MODEL"], base_url=os.environ["OLLAMA_BASE_URL"])
 
 vector_index = Neo4jVector.from_existing_graph(
-    OpenAIEmbeddings(),
+    # OpenAIEmbeddings(),
+    embedding_model,
     search_type="hybrid",
     node_label="Document",
     text_node_properties=["text"],
