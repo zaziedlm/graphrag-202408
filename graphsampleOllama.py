@@ -117,23 +117,38 @@ class Entities(BaseModel):
         "appear in the text",
     )
 
+# prompt = ChatPromptTemplate.from_messages(
+#     [
+#         (
+#             "system",
+#             "You are extracting organization and person entities from the text.",
+#         ),
+#         (
+#             "human",
+#             "Use the given format to extract information from the following "
+#             "input: {question}",
+#         ),
+#     ]
+# )
 prompt = ChatPromptTemplate.from_messages(
     [
         (
             "system",
-            "You are extracting organization and person entities from the text.",
+            "Your task is to extract 'organization' and 'person' entities from the provided text. Ensure accuracy and clearly formatted responses.",
         ),
         (
             "human",
-            "Use the given format to extract information from the following "
-            "input: {question}",
+            "Please identify and list each 'organization' and 'person' entity found in the input below. Use this format:\n\n"
+            "- Organizations: [list of organizations]\n"
+            "- Persons: [list of persons]\n\n"
+            "Input text: {question}",
         ),
     ]
 )
 
 entity_chain = prompt | llm.with_structured_output(Entities)
 
-entity_chain.invoke({"question": "梧空とにゃんたは戦った"}).names
+print(entity_chain.invoke({"question": "梧空とフリーザは戦った"}).names)
 
 def generate_full_text_query(input: str) -> str:
     """
@@ -215,6 +230,11 @@ chain = (
     | StrOutputParser()
 )
 
-result = chain.invoke({"question": "梧空と仲が悪いのは誰？"})
+#result = chain.invoke({"question": "梧空と仲が悪いのは誰？"})
+result = chain.invoke({"question": "梧飯の敵は誰？与えられたコンテキストからわかる情報のみを使用して回答を生成してください。"})
+
+print(result)
+
+result = chain.invoke({"question": "梧空の子供は誰？与えられたコンテキストからわかる情報のみを使用して回答を生成してください。"})
 
 print(result)
